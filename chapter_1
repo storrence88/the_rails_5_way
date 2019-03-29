@@ -1,0 +1,70 @@
+
+* Rails has always been preconfigured to include three standard modes:
+    * Developement
+    * Test
+    * Production
+* It’s also possible to create you own custom environments
+* RAILS_ENV can be used to determine the current environment
+* The most fundamental aspect of a Rails app is its list of external libraries it depends on
+    * Bundler is a tool that is used to manage RubyGem dependencies for Rails
+    * Takes a manifest file as input and is able to fetch, download, and install the gems that are listed in the manifest
+
+
+1.1 Bundler
+
+* One of the most important thing Bundler does is dependent resolution on the fill list of gems specified In your configuration, all at once.
+    * Different from the “one-at-a-time” dependency approach employed by previous versions of Rails
+* Bundler will often solve dependency issues by evaluating dependencies all at once and figuring out the exact right versions of gems to load.
+
+1.1.1 Gemfile
+
+* It is the root of the Rails project directory
+* No filename extension
+* Specifies all dependencies of the Rails app, including the version of Rails being used
+* It is possible to load a dependency for a specific environment by placing it in a group block and specifying one or more environment names as symbols
+
+group :development do
+    gem ‘byebug’
+end
+
+group :test do
+    gem ‘capybara’
+    gem ‘database_cleaner’
+end
+
+group :development, :test do
+    gem ‘rspec-rails’
+    gem ‘factory_bot_rails’
+end
+
+* The ‘gem’ directive can take an optional second argument that will specify the version of the RubyGem desired
+    * Leaving the version off will get the latest available stable version, which may or may not be the latest version
+    * Using the :require option solves declaring the gem directly in the Gemfile
+        * ~> will install any gem with a minor update 1.0.X
+        * >= will install any gem above specified version 
+
+1.1.1.1 Loading Gems Directly from a Git Repository
+
+* Most gem are loaded from https://rubygems.org but it is possible to specify a gem by its source repository as long as it has a .gemspec file in the root directory
+    * Just add a :git option
+
+gem ‘carrierwave’, git: ‘git@github.com:carrierwaveuploader/carrierwave.git'
+
+* If the gem source repo is hosted on GitHub and is public, you can use the :GitHub shorthand
+
+gem ‘carrierwave’, github: ‘carrierwaveuploader/carrierwave'
+
+* If there is no .gemspec file, you must tell Bundler which version to use when resolving dependencies
+
+gem ‘deep_merge’, ‘1.0’, git: ‘git://github.com/peritor/deep_merge.git'
+
+* Additionally, you can specify that a git repo should use a particular ref, branch, or tag as options to the git directive
+
+git ‘git://github.com/rails/rails.git',
+    ref: ‘4aded’
+
+git ‘git://github.com/rails/rails.git',
+    branch: ‘3-2-stable’
+
+git ‘git://github.com/rails/rails.git',
+    tag: ‘v3.2.11'
