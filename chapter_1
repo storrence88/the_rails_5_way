@@ -68,3 +68,44 @@ git ‘git://github.com/rails/rails.git',
 
 git ‘git://github.com/rails/rails.git',
     tag: ‘v3.2.11'
+    
+1.1.2 Installing Gems
+
+* Every time you modify the Gemfile or if you introduce dependencies not yet installed, use the bundle install (bundle) command to ensure all dependencies are resolved for your application
+* Using the install command updates all dependencies in your Gemfile to the latest versions that do not conflict with other dependencies. This command is invoked automatically when creating a new Rails app.
+* The first time you run bundle install, no Gemfile.lock exists yet. Bundler will fetch all remote sources, then resolve dependencies, then install needed gems
+* Rerunning bundle install without updating the Gemfile will cause Bundler to re-fetch all remote sources, but then use the dependencies specified in the Gemfile.lock instead of resolving dependencies again. Typically, this doesn’t change anything with your Rails configuration
+* Lastly, and most commonly, is that the Gemfile.lock exists, and you update your Gemfile by adding or modifying a dependency. When rerunning bundle install, the dependencies specified in the Gemfile.lock will be used for the gems that did not change, but dependencies will be resolved for any gems that were updated
+
+1.1.3 Gem Locking
+
+* Every time you run bundle install or bundle update, Bundler calculates the dependency tree for your application and stores the result in a file called Gemlock.file
+* Once this file is created, Bundler will only load specific versions of Gems that you were using the moment the Gemfile.lock was created
+* The idea is that you lock your configuration down to using versions of dependencies that you know will work well with your application
+* It is IMPORTANT that the Gemfile.lock is checked into version control to ensure that every machine running the application uses the exact same version of gem
+
+1.1.4 Packaging Gems
+
+* It is possible to package your gems in vendor/cache directory inside of your Rails app
+
+$ bundle package
+
+* Running the bundle install —local in an application with packed gems will use the gems in the package and skip connecting to rubygems.org or any other gem sources
+    * You can use this to avoid external dependencies at the time of reply or if you depend on private gems that are not available in any public repositories
+
+1.1.5 Binstubs
+
+* Bootstrapping or creating a new Rails app will result in the creation of binstubs for Rails executables, located in the bin folder.
+* A binstub is a script containing an executable that runs in the context of the bundle.
+    * This means that you do not need to prefix bundle exec each time a Rails specific executable is invoked or used
+    * You will still need to use bundle exec when using non-Rails scripts to get a properly initialized RubyGems environment
+* You can add a binstub of a commonly used executable or command in your bundle by using:
+
+$ bundle binstubs some-gem-name
+
+Ex:
+$ bundle binstubs guard
+
+* http://www.singhajit.com/why-arent-you-using-binstubs-yet/
+* https://mislav.net/2013/01/understanding-binstubs/
+
