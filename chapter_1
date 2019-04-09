@@ -166,6 +166,43 @@ $ bundle binstubs guard
 
 1.3.8 config/initializers/new_framework_defaults.rb
 
+* This initializer is used to ease migration to Rails 5 from earlier versions
+
+1.3.9 config/initializers/session_store.rb
+
+* Rails session cookies are encrypted by default
+* This initializer configures the session store of the app by setting its session store type and key
+* Session cookies are signed using the secret_key_base set in config/secrets.yml
+* If you feel that the secret_key has been compromised, you can change the secret or run rake secret to generate a new one automatically
+
+1.3.10 config/initializers/wrap_parameters.rb
+
+* ​Introduced in Rails 3.1, this initializer configures your app to work with many Javascript frameworks out of the box
+* When submitting JSON parameters to a controller, Rails will wrap the params into a nested hash, with the controller’s name being set as the key
+* By doing that, the controller can treat JS clients and HTML form identically
+
+{ “title”: “The Rails 5 Way”, “article” => { “title”: “The Rails 5 Way" } }
+
+
+
+1.4 Other Common Initializers
+
+While the following settings are not included in the Rails boilerplate, they are sufficiently common enough as to be worth mentioning
+
+1.4.1 Time Zones
+
+* The default time zone for Rails is UTC
+* It is possible to change this with the following code
+
+# Run “rake -D time” for a list of tasks for finding time zone names
+
+config.time_zone = ‘Central Time (US & Canada)’
+
+# rake time:zones:all will list all of the time zones Rails knows about
+
+1.4.2 Localization
+
+* Rails features localization support via locale files, but both it and the location of the locale files can be overridden in an intializer
 
 
 
